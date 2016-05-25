@@ -1,10 +1,11 @@
-function Jigsaw(img, width, height) {
+function Jigsaw(img, width, height, margin) {
     this.__chips = [];
-    this.__img = img;
+    this.target = img;
     this.rowspan = 0;
     this.colspan = 0;
     this.chipWidth = width;
     this.chipHeight = height;
+    this.chipMargin = margin;
     this.orderable = true;
 }
 
@@ -24,10 +25,10 @@ Jigsaw.prototype = {
             if ((_i = parseInt(i % colspan)) === 0 && i != 0)
                 _j++;
             chip = this.__chips[i];
-            x = _i * (chip.width + chip.margin);
-            y = _j * (chip.height + chip.margin);
+            x = _i * (chip.width + this.chipMargin);
+            y = _j * (chip.height + this.chipMargin);
             if (i > 0 && flag && (flag = this.__chips[i].__i > this.__chips[i - 1].__i));
-            graphicsObjectArray.push(chip.draw(ctx, this.__img, x, y));
+            graphicsObjectArray.push(chip.draw(ctx, this.target, x, y));
         }
         this.orderable = flag;
         return graphicsObjectArray;
@@ -51,10 +52,10 @@ Jigsaw.prototype = {
     //     return this.rowspan;
     // },
     width: function() {
-        return this.__img.width;
+        return this.target.width;
     },
     height: function() {
-        return this.__img.height;
+        return this.target.height;
     },
     redraw: function(ctx) {
         random(this.__chips);

@@ -1,6 +1,6 @@
 var GraphicsObject = require("./graphics_object");
 
-function Chip(i, sx, sy, swidth, sheight, width, height, margin) {
+function Chip(i, sx, sy, swidth, sheight, width, height) {
     if (i instanceof Chip) {
         Object.assign(this, i);
         return this;
@@ -12,7 +12,6 @@ function Chip(i, sx, sy, swidth, sheight, width, height, margin) {
     this.sheight = sheight;
     this.width = width;
     this.height = height;
-    this.margin = margin || 1;
 }
 
 Chip.prototype.draw = function(ctx, img, x, y) {

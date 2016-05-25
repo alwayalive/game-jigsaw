@@ -3,20 +3,26 @@ var BlankChip = require("./blank_chip");
 var pos = require("./position");
 
 var sortedGraphicsObjectArray;
-var totalStep = 0;
-var totalTime = 0;
+// var totalStep = 0;//点击步数
+// var totalTime = 0;//使用时间
 var blankChip = null;
 var blankChipIndex = 0;
 var vanishedChip = null;
 var __convas = null;
 var __ctx = null;
 var __jigsaw = null;
+var win = false;
 
-function winner() {
-    alert("闯关成功！");
+
+function victory() {
     var chips = __jigsaw.getChips();
-    chips.pop(blankChip);
-    chips.push(vanishedChip);
+    win = true;
+    alert("闯关成功！");
+    // chips.pop(blankChip);
+    // chips.push(vanishedChip);
+    // __jigsaw.chipMargin = 0;
+    // __jigsaw.draw(__ctx);
+    __ctx.drawImage(__jigsaw.target,0,0,__jigsaw.width(),__jigsaw.height());
 }
 //移动空块
 function move(chip1, chip2) {
@@ -71,6 +77,8 @@ function bindCanvas(convas) {
 
 //处理canvas点击行为
 function canvasClickHandle(e) {
+    if( win )
+        return;
     var target = e.target || e.srcElement,
         mouse = pos.offset(target, e),
         hit, i;
@@ -83,7 +91,7 @@ function canvasClickHandle(e) {
         move(blankChip, hit.data);
         redrawBoard();
         sortObjectArray(__jigsaw.draw(__ctx));
-        if (__jigsaw.orderable) winner();
+        if (__jigsaw.orderable) victory();
     }
 }
 //事件监听
@@ -112,9 +120,9 @@ function inverseOpera(r, a1, a2) {
     return r / (a1 + a2);
 }
 //通过逆运算得到空白块在jigsaw.__chips数组中的索引
-function getBlankChipIndex() {
-    var iy = inverseOpera(blankChip.y, blankChip.height, blankChip.margin),
-        ix = inverseOpera(blankChip.x, blankChip.width, blankChip.margin);
+function getBlankChipIndex(x, y, width, height, margin) {
+    var iy = inverseOpera(blankChip.y, blankChip.height, __jigsaw.chipMargin),
+        ix = inverseOpera(blankChip.x, blankChip.width, __jigsaw.chipMargin);
     return iy * __jigsaw.colspan + ix;
 }
 

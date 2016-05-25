@@ -2,7 +2,7 @@ var Chip = require("./chip");
 var clazz = require("./clazz");
 var GraphicsObject = require("./graphics_object");
 
-function BlankChip(i, sx, sy, swidth, sheight, width, height, margin) {
+function BlankChip(i, sx, sy, swidth, sheight, width, height) {
     Chip.apply(this, arguments);
 }
 clazz.inherit(Chip, BlankChip);
