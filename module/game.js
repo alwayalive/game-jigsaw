@@ -170,6 +170,6 @@ module.exports = {
         blankChip = createBlankChip(vanishedChip = jigsaw.pop());   
         jigsaw.push(blankChip);
         //绘制碎片，将返回的图形对象数据根据绘制的顺序进行排序
-        sortObjectArray(jigsaw.redraw(ctx));
+        sortObjectArray(jigsaw.draw(ctx));
     }
 };

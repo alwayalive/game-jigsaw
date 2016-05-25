@@ -8,7 +8,7 @@ var canvas = document.querySelector("canvas"),
     jigsaw = null;
 
 //加载完图片以后初始化游戏界面
-loadImage('6b8c14f8gw1eyeugdb018j20xc0p0n2p.jpg', function(e) {
+loadImage('./image/6b8c14f8gw1eyeugdb018j20xc0p0n2p.jpg', function(e) {
 
     var img = e.target || e.srcElement;
     jigsaw = new Jigsaw(img, 300, 300, 1);
