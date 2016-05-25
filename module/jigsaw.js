@@ -1,7 +1,8 @@
 function Jigsaw(img, width, height) {
     this.__chips = [];
     this.__img = img;
-    this.__rowspan = 0;
+    this.rowspan = 0;
+    this.colspan = 0;
     this.chipWidth = width;
     this.chipHeight = height;
     this.orderable = true;
@@ -9,7 +10,7 @@ function Jigsaw(img, width, height) {
 
 Jigsaw.prototype = {
     draw: function(ctx) {
-        var colspan = this.getColspan(),
+        var colspan = this.colspan,
             graphicsObjectArray = [],
             _i = 0,
             _j = 0,
@@ -34,22 +35,21 @@ Jigsaw.prototype = {
     getChips: function() {
         return this.__chips;
     },
-    push: function(chip, flag) {
-        this.__chips.push(chip);
-        if (flag)
-            this.__rowspan++;
-    },
-    pop: function(chip, flag) {
+    pop: function(chip) {
         return this.__chips.pop();
     },
-    getColspan: function() {
-        if (this.__chips.length === 0)
-            return 0;
-        return this.__chips.length / this.__rowspan;
+    push: function(chip) {
+        return this.__chips.push(chip);
     },
-    getRowspan: function() {
-        return this.__rowspan;
-    },
+    // getColspan: function() {
+    //     // if (this.__chips.length === 0)
+    //     //     return 0;
+    //     // return this.__chips.length / this.rowspan;
+    //     return this.colspan;
+    // },
+    // getRowspan: function() {
+    //     return this.rowspan;
+    // },
     width: function() {
         return this.__img.width;
     },
@@ -59,6 +59,11 @@ Jigsaw.prototype = {
     redraw: function(ctx) {
         random(this.__chips);
         return this.draw(ctx);
+    },
+    fill: function( fillDate ){
+        this.__chips = fillDate.chips;
+        this.rowspan = fillDate.rowspan;
+        this.colspan = fillDate.colspan;
     }
 }
 

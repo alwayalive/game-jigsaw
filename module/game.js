@@ -22,7 +22,7 @@ function winner() {
 function move(chip1, chip2) {
     var tmp,
         chips = __jigsaw.getChips(),
-        colspan = __jigsaw.getColspan(),
+        colspan = __jigsaw.colspan,
         len = chips.length,
         leftIndex = blankChipIndex - 1, //空白块的左边块索引
         rightIndex = blankChipIndex + 1, //空白块的右边块索引
@@ -115,45 +115,48 @@ function inverseOpera(r, a1, a2) {
 function getBlankChipIndex() {
     var iy = inverseOpera(blankChip.y, blankChip.height, blankChip.margin),
         ix = inverseOpera(blankChip.x, blankChip.width, blankChip.margin);
-    return iy * __jigsaw.getColspan() + ix;
+    return iy * __jigsaw.colspan + ix;
 }
 
 //切割图片分成Chip碎片对象保存进入Jigsaw对象中
-function cropImg(jigsaw) {
-    var width = jigsaw.width,
-        _width = width;
-    height = jigsaw.height,
+function cropImg(img, width, height, chipWidth, chipHeight) {
+    var _width = width,
         sx = 0,
         sy = 0,
         chip = null,
         index = 0,
-        i, j;
+        i, j,
+        rowspan = 0,
+        chips = [];
+    for (i = 0; (height -= chipHeight) >= 0; i++) {
+        rowspan++;
+        for (j = 0; (width -= chipWidth) >= 0; j++) {
 
-    for (i = 0;
-        (height -= jigsaw.chipHeight) >= 0; i++) {
-        for (j = 0;
-            (width -= jigsaw.chipWidth) >= 0; j++) {
+            sx = j * chipWidth;
+            sy = i * chipHeight;
 
-            sx = j * perWidht;
-            sy = i * perHeight;
-
-            chip = new Chip(index++, sx, sy, perWidht, perHeight, perWidht, perHeight);
-            // chip.draw( ctx, img , j * ( perWidht + 1 ) , i * ( perHeight + 1 ) );
-            jigsaw.push(chip, j === 0);
-            // ctx.drawImage( e.target , sx , sy , perWidht , perHeight , j * (perWidht+1) ,i * (perHeight+1) ,perWidht , perHeight);
+            chip = new Chip(index++, sx, sy, chipWidth, chipHeight, chipWidth, chipHeight);
+            chips.push(chip);
         }
         width = _width;
     }
+    return {
+            chips : chips,
+            rowspan : rowspan,
+            colspan : parseInt(chips.length / rowspan)
+        };
 }
 module.exports = {
     init: function(convas, ctx, jigsaw) {
+        jigsaw.fill( cropImg(jigsaw.img, jigsaw.width(), jigsaw.height(), jigsaw.chipWidth, jigsaw.chipHeight) );  //把一张图分割成一组Chip数据
         bindContext(ctx);
         bindCanvas(convas);
         bindJigsaw(jigsaw);
-        cropImg(jigsaw);
         eventListener(convas);
-        blankChip = createBlankChip(vanishedChip = jigsaw.pop());
+        //创建可交换碎片，并与最后一张图片进行替换
+        blankChip = createBlankChip(vanishedChip = jigsaw.pop());   
         jigsaw.push(blankChip);
+        //绘制碎片，将返回的图形对象数据根据绘制的顺序进行排序
         sortObjectArray(jigsaw.redraw(ctx));
     }
 };

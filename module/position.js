@@ -1,15 +1,7 @@
+// 得到在target容器内的坐标
 function offset(target, e) {
     var x = parseInt(e.pageX - target.offsetLeft);
     var y = parseInt(e.pageY - target.offsetTop);
-    return {
-        x,
-        y
-    }
-}
-
-function screen(target, e) {
-    var x = parseInt(e.pageX - target.screenLeft);
-    var y = parseInt(e.pageY - target.screenTop);
     return {
         x,
         y
