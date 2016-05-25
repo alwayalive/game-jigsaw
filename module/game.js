@@ -62,7 +62,11 @@ function redrawBoard() {
     __ctx.fillRect(0, 0, __jigsaw.width(), __jigsaw.height());
     __ctx.restore();
 }
-
+//初始化画板，调整面板大小为适合
+function initCanvas(){
+    __convas.width = __jigsaw.width() + __jigsaw.width() / __jigsaw.chipWidth * __jigsaw.chipMargin;
+    __convas.height = __jigsaw.height() + __jigsaw.height() / __jigsaw.chipHeight * __jigsaw.chipMargin;
+}
 function bindContext(ctx) {
     __ctx = ctx;
 }
@@ -161,6 +165,7 @@ module.exports = {
         bindCanvas(convas);
         bindJigsaw(jigsaw);
         eventListener(convas);
+        initCanvas();
         //创建可交换碎片，并与最后一张图片进行替换
         blankChip = createBlankChip(vanishedChip = jigsaw.pop());   
         jigsaw.push(blankChip);
